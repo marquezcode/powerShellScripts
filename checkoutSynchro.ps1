@@ -15,11 +15,16 @@ function createObject{
         [string]$itemPath,
         [string]$itemName
     )
-    $item = Get-Item -Path $itemPath
+    $item = Get-Item -Path $itemPath -ErrorAction $errorItem = $true
     $global:millisNow = [System.Math]::Round((Get-Date).Ticks / 10000)
     $millis = $global:millisNow - $global:millisLast
     if ( $global:lastNameCopy -ne $itemName ){
         Write-Host $global:eventName
+        while($erroritem == $true){
+             Write-Host "waiting..."
+             $erroritem == $false
+             $item = Get-Item -Path $itemPath -ErrorAction $errorItem = $true
+        }
         # Construct the full destination path, including the folder you want to delete
         $relativePath = $itemPath.Substring($sourcePath.Length, $itemPath.Length - $sourcePath.Length)
         Write-Host "relativePath: $relativePath"
@@ -200,7 +205,7 @@ try {
     Write-Host "Monitoring for changes..."
     while ($true) {
        # Sleep for 0.1 seconds before checking for changes again
-       Start-Sleep -Milliseconds 100
+       Start-Sleep -Milliseconds 50
         
     }
 }
